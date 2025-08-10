@@ -8,6 +8,7 @@ dependencies = [
     "beautifulsoup4>=4.13.4",
     "black>=25.1.0",
     "chromadb>=1.0.15",
+    "grandalf>=0.8",
     "isort>=6.0.1",
     "langchain>=0.3.27",
     "langchain-community>=0.3.27",
@@ -15,5 +16,17 @@ dependencies = [
     "langgraph>=0.6.3",
     "pytest>=8.4.1",
     "python-dotenv>=1.1.1",
+    "sentence-transformers>=5.1.0",
     "tavily-python>=0.7.10",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "."
+]
+testpaths = [
+    "tests"
+]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"

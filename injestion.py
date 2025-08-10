@@ -1,11 +1,14 @@
-from dotenv import load_dotenv
 import os
-from langchain_community.document_loaders import WebBaseLoader
+
+from dotenv import load_dotenv
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
+from langchain_community.document_loaders import WebBaseLoader
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_openai import OpenAIEmbeddings
 
 load_dotenv()
+
 urls = [
     "https://lilianweng.github.io/posts/2023-06-23-agent/",
     "https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/",
@@ -28,7 +31,14 @@ text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
 )
 texts = text_splitter.split_documents(doc_list)
 
-embeddings = OpenAIEmbeddings()
+# The sentence-transformers/all-MiniLM-L6-v2 model is:
+# Free to use - No API keys or rate limits
+# Lightweight - Fast inference and small memory footprint
+# High quality - Good performance for most embedding tasks
+# Consistent - Same model you've used in other projects
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+#embeddings = OpenAIEmbeddings()
+
 vectorstore = Chroma.from_documents( documents=texts,
                                      embedding=embeddings,
                                      collection_name="langchain_chroma_agentic_rag",
@@ -39,15 +49,3 @@ retriever = Chroma(
     embedding_function=embeddings,
     persist_directory="./chroma_db",
 ).as_retriever()
-
-
-
-
-
-
-
-
-
-
-
-
